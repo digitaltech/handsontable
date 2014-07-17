@@ -1,0 +1,1059 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+ 
+
+  <!--
+  Loading Handsontable (full distribution that includes all dependencies apart from jQuery)
+  -->
+  <script data-jsfiddle="common" src="../SPServices/jquery-1.11.1.min.js"></script>
+  <script data-jsfiddle="common" src="../SPServices/jquery.SPServices-2014.01/jquery.SPServices-2014.01.js"></script>
+  <script data-jsfiddle="common" src="../SPServices/jquery.SPServices-2014.01/jquery.SPServices-2014.01.min.js"></script>
+  <script data-jsfiddle="common" src="../dist/jquery.handsontable.full.js"></script>
+  <script data-jsfiddle="common" src="../lib/numeral.de-de.js"></script>
+  <script data-jsfiddle="common" src="../extensions/jquery.handsontable.removeRow.js"></script>
+  <link data-jsfiddle="common" rel="stylesheet" media="screen" href="../extensions/jquery.handsontable.removeRow.css">
+  <link data-jsfiddle="common" rel="stylesheet" media="screen" href="../dist/jquery.handsontable.full.css">
+  <link data-jsfiddle="common" rel="stylesheet" media="screen" href="css/samples.css?20140331">
+  <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+
+</head>
+
+<body>
+ 
+<div class="wrapper">
+  <div class="wrapper-row">
+    
+
+    <div id="container">
+	
+	  
+
+ <div style="text-align:center;padding-left: 200px;"><b>July 2014<b><div>
+ <br>
+	
+      <div class="columnLayout">
+
+        <div class="rowLayout">
+      <div class="descLayout">
+	  
+        <div class="pad" data-jsfiddle="timesheet">
+          <a name="lazy"></a>
+
+		  <button name="add" id="addProject" title="adds row to top of table">Add Project </button>
+		  <button name="add" id="addMinorTask" title="adds row to top of table">Add Minor Task </button>
+		  <button name="add" id="addPersonal" title="adds row to top of table">Add Personal </button>
+		  
+          <div id="timesheet"></div>
+           
+        </div>
+		
+      </div>
+      <div class="pepecodeLayout">
+        <div class="pad">
+		
+          <style data-jsfiddle="common">
+            .handsontable .currentRow {
+              background-color: #E7E8EF;
+            }
+
+            .handsontable .currentCol {
+              background-color: #D2E4F2;
+            }
+          </style>
+
+           <script >
+		  
+		  var ColNames;
+		  
+		  
+		  	//
+			
+			  var CellColorRender = function (instance, td, row, col, prop, value, cellProperties) {
+			  Handsontable.renderers.TextRenderer.apply(this, arguments);
+			  $(td).css({
+				background: '#E1E1E1'
+			  });
+				};
+				
+			  var ColorColumnHeader = function (instance, td, row, col, prop, value, cellProperties) {
+			  Handsontable.renderers.TextRenderer.apply(this, arguments);
+			   $(td).css({
+				background: '#7AB0DF'
+			 });
+			  $(td).css({
+				color: 'white'
+			 });
+			  $(td).css({
+				fontWeight: 'bold'
+			 });
+			 };
+
+			 var ColorColumnHoursHeader=function (instance, td, row, col, prop, value, cellProperties) {
+			  Handsontable.renderers.TextRenderer.apply(this, arguments);
+			   $(td).css({
+				background: '#D0D0D0'
+			 });
+			  $(td).css({
+				fontWeight: 'bold'
+			 });
+			 
+			 };
+
+		  
+		  //
+		  function PersonalDay(instance, td, row, col, prop, value, cellProperties) {
+				  Handsontable.renderers.TextRenderer.apply(this, arguments);
+				  td.style.fontWeight = 'bold';
+				  td.style.color = '#F7E77D';
+				  td.style.background = '#F7E77D';
+				}
+		 //
+		  function WorkingDay(instance, td, row, col, prop, value, cellProperties) {
+					  Handsontable.renderers.TextRenderer.apply(this, arguments);
+					  td.style.background = '#FFFFFF';
+					}
+					
+					
+					//
+			function BlockDeletes()
+			{
+			$("td:contains('Category')").parent().find(".btn").remove()
+			$("td:contains('Project')").parent().find(".btn").remove()
+			$("td:contains('Minor Task')").parent().find(".btn").remove()
+			$("td:contains('Personal')").parent().find(".btn").remove()
+			}
+			
+			
+			$('#addProject').on('click', function () {		 
+				/*Code added by Sourabh Starts here */
+			var container = $("#timesheet");
+            container.handsontable({
+              data: getInfo(),
+              minRows: 4,
+              minCols: 14,
+              minSpareRows: 1,
+			  colWidths: [160,130,140,160,60,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],
+              currentRowClassName: 'currentRow',
+              currentColClassName: 'currentCol',
+			  outsideClickDeselects: false,
+              removeRowPlugin: true,
+			  stretchH: 'all',
+			   fixedColumnsLeft: 4,
+			   columns: [
+						  
+						 {
+							data: "0",
+							readOnly: true
+							
+							
+						  },
+						   {
+							data: "1",
+							readOnly: true
+							
+						  },
+						   {
+							data: "2",
+							type: 'dropdown',
+							source: ["project1", "project2", "project3", "project4", "project5", "project6"]
+							
+						  },
+						  {
+							data: "3"
+							
+							
+		
+						  },
+						  {
+							data: "4",
+							type: "numeric"
+						
+						  },
+						   {
+							data: "5",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "6",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "7",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "8",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "9",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "10",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "11",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "12",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "13",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "14",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "15",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "16",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "17",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "18",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "19",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "20",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "21",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "22",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "23",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "24",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "25",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "26",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "27",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "28",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "29",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "30",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "31",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "32",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "33",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "34",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "35",
+							type: "numeric"
+							
+						  },
+						  {
+						 	data: "TipoDeFila"
+
+						  }
+					
+						],
+	
+	
+	
+			  		    width: function () {
+			            if (maxed && availableWidth === void 0) {
+				        calculateSize();
+				}
+			return maxed ? availableWidth : 1000;
+			  },
+			            height: function () {
+			
+				        if (maxed && availableHeight === void 0) {
+				        calculateSize();
+				}
+				return maxed ? availableHeight : 300;
+			  },
+			 cells: function (row, col, prop) {
+				var cellProperties = {};
+			 
+			 //
+			 
+				if (container.handsontable('getData')[row][col] === 'x') 
+				{
+				
+				cellProperties.renderer = PersonalDay;
+				}
+				 
+				 //
+				 
+				 if (row === 0 && col <= 3 ) {
+				this.renderer = ColorColumnHeader;
+				cellProperties.readOnly = true; 
+					}
+				else if (row === 0 && col > 3 )
+				{
+				this.renderer = ColorColumnHoursHeader;
+				cellProperties.readOnly = true; 
+				}
+				
+				
+				//
+				
+				if(row === 1)
+				{	
+		     var Project = function (instance, td, row, col, prop, value, cellProperties) {
+			  Handsontable.renderers.TextRenderer.apply(this, arguments);
+			   $(td).css({background: '#DDDDDD'});
+			  $(td).css({color: 'black'});
+			  $(td).css({fontWeight: 'bold'});
+			 };
+				this.renderer = Project;
+				cellProperties.readOnly = true; 
+				
+				}
+				
+					
+				
+				return cellProperties;
+			 
+			 }
+			  
+			});
+			/*Code added by Sourabh Ends here */
+		    MinorTaskCategory=  $("td:contains('Minor Task')").parent().parent().children().index($("td:contains('Minor Task')").parent());
+            $edit.handsontable('alter', 'insert_row', MinorTaskCategory);
+			miFilaAgregada = $("td:contains('Minor Task')").parent().parent().children()[MinorTaskCategory];
+			$('#' + miFilaAgregada).td[36].value("pepe");
+			BlockDeletes();
+		
+
+        });
+			
+			//
+			function InsertRows() {
+	        $edit = $('#timesheet');
+			var ProjectCategory ;
+			var MinorTaskCategory ;
+			var PersonalCategory ; 
+			var miFilaAgregada;
+
+        
+		
+		  $('#addMinorTask').on('click', function () {
+		  	
+			PersonalCategory=  $("td:contains('Personal')").parent().parent().children().index($("td:contains('Personal')").parent());
+            $edit.handsontable('alter', 'insert_row', PersonalCategory);
+			BlockDeletes();
+			/*Code added by Sourabh Starts here */
+			var container = $("#timesheet");
+            container.handsontable({
+              data: getInfo(),
+              minRows: 4,
+              minCols: 14,
+              minSpareRows: 1,
+			  colWidths: [160,130,140,160,60,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],
+              currentRowClassName: 'currentRow',
+              currentColClassName: 'currentCol',
+			  outsideClickDeselects: false,
+              removeRowPlugin: true,
+			  stretchH: 'all',
+			   fixedColumnsLeft: 4,
+			   columns: [
+						  
+						 {
+							data: "0",
+							readOnly: true
+							
+							
+						  },
+						   {
+							data: "1",
+							readOnly: true
+							
+						  },
+						   {
+							data: "2",
+							type: 'dropdown',
+							source: ["Task1", "Task2", "Task3"]
+							
+						  },
+						  {
+							data: "3"
+							
+							
+		
+						  },
+						  {
+							data: "4",
+							type: "numeric"
+						
+						  },
+						   {
+							data: "5",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "6",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "7",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "8",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "9",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "10",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "11",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "12",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "13",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "14",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "15",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "16",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "17",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "18",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "19",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "20",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "21",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "22",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "23",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "24",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "25",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "26",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "27",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "28",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "29",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "30",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "31",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "32",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "33",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "34",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "35",
+							type: "numeric"
+							
+						  },
+						  {
+						 	data: "TipoDeFila"
+
+						  }
+					
+						],
+	
+	
+	
+			  		    width: function () {
+			            if (maxed && availableWidth === void 0) {
+				        calculateSize();
+				}
+			return maxed ? availableWidth : 1000;
+			  },
+			            height: function () {
+			
+				        if (maxed && availableHeight === void 0) {
+				        calculateSize();
+				}
+				return maxed ? availableHeight : 300;
+			  },
+			 cells: function (row, col, prop) {
+				var cellProperties = {};
+			 
+			 //
+			 
+				if (container.handsontable('getData')[row][col] === 'x') 
+				{
+				
+				cellProperties.renderer = PersonalDay;
+				}
+				 
+				 //
+				 
+				 if (row === 0 && col <= 3 ) {
+				this.renderer = ColorColumnHeader;
+				cellProperties.readOnly = true; 
+					}
+				else if (row === 0 && col > 3 )
+				{
+				this.renderer = ColorColumnHoursHeader;
+				cellProperties.readOnly = true; 
+				}
+				
+				
+				//
+				
+				if(row === 1)
+				{	
+		     var Project = function (instance, td, row, col, prop, value, cellProperties) {
+			  Handsontable.renderers.TextRenderer.apply(this, arguments);
+			   $(td).css({background: '#DDDDDD'});
+			  $(td).css({color: 'black'});
+			  $(td).css({fontWeight: 'bold'});
+			 };
+				this.renderer = Project;
+				cellProperties.readOnly = true; 
+				
+				}
+				
+					
+				
+				return cellProperties;
+			 
+			 }
+			  
+			});
+			/*Code added by Sourabh ends here */
+        });
+		
+		  $('#addPersonal').on('click', function () {
+		  
+		 var rowcount=$('#timesheet tr').length;
+         $edit.handsontable('alter', 'insert_row', rowcount);
+		 BlockDeletes();
+        });
+
+    }
+					
+	
+		  //
+		   function getInfo(){
+           return [
+			  {0: "Category" ,1:"Code",2:"Name",3:"Concept",4:"Total",5:"1", 6:"2",7:"3",8:"4",9:"5",10:"6",11:"7",12:"8",13:"9",14:"10",15:"11",16:"12",17:"13",18:"14",19:"15",20:"16",21:"17",22:"18",23:"19",24:"20",25:"21",26:"22",27:"23",28:"24",29:"25",30:"26",31:"27",32:"28",33:"29",34:"30",35:"31"},
+              {0:"Project"},
+			  {0:"Minor Task"},
+			  {0:"Personal"}
+			  
+			 
+            ];
+          }
+			
+			var maxed = false
+			  , resizeTimeout
+			  , availableWidth
+			  , availableHeight
+			  , $window = $(window)
+			  , $timesheet = $('#timesheet');
+
+			var calculateSize = function () {
+			  var offset = $timesheet.offset();
+			  availableWidth = $window.width() - offset.left + $window.scrollLeft();
+			  availableHeight = $window.height() - offset.top + $window.scrollTop();
+			};
+			
+			$window.on('resize', calculateSize);
+			
+			function InitGrid()
+			{
+			
+			
+			var container = $("#timesheet");
+            container.handsontable({
+              data: getInfo(),
+              minRows: 4,
+              minCols: 14,
+              minSpareRows: 1,
+			  colWidths: [160,130,140,160,60,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],
+              currentRowClassName: 'currentRow',
+              currentColClassName: 'currentCol',
+			  outsideClickDeselects: false,
+              removeRowPlugin: true,
+			  stretchH: 'all',
+			   fixedColumnsLeft: 4,
+			   columns: [
+						  
+						 {
+							data: "0",
+							readOnly: true
+							
+							
+						  },
+						   {
+							data: "1",
+							readOnly: true
+							
+						  },
+						   {
+							data: "2",
+							type: 'dropdown',
+							source: ["project1", "project2", "project3", "project4", "project5", "project6"]
+							
+						  },
+						  {
+							data: "3"
+							
+							
+		
+						  },
+						  {
+							data: "4",
+							type: "numeric"
+						
+						  },
+						   {
+							data: "5",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "6",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "7",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "8",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "9",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "10",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "11",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "12",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "13",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "14",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "15",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "16",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "17",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "18",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "19",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "20",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "21",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "22",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "23",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "24",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "25",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "26",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "27",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "28",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "29",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "30",
+							type: "numeric"
+							
+						  },
+						   {
+							data: "31",
+							type: "numeric"
+							
+						  },
+						  {
+							data: "32",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "33",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "34",
+							type: "numeric"
+							
+						  },
+						    {
+							data: "35",
+							type: "numeric"
+							
+						  },
+						  {
+						 	data: "TipoDeFila"
+
+						  }
+					
+						],
+	
+	
+	
+			  		    width: function () {
+			            if (maxed && availableWidth === void 0) {
+				        calculateSize();
+				}
+			return maxed ? availableWidth : 1000;
+			  },
+			            height: function () {
+			
+				        if (maxed && availableHeight === void 0) {
+				        calculateSize();
+				}
+				return maxed ? availableHeight : 300;
+			  },
+			 cells: function (row, col, prop) {
+				var cellProperties = {};
+			 
+			 //
+			 
+				if (container.handsontable('getData')[row][col] === 'x') 
+				{
+				
+				cellProperties.renderer = PersonalDay;
+				}
+				 
+				 //
+				 
+				 if (row === 0 && col <= 3 ) {
+				this.renderer = ColorColumnHeader;
+				cellProperties.readOnly = true; 
+					}
+				else if (row === 0 && col > 3 )
+				{
+				this.renderer = ColorColumnHoursHeader;
+				cellProperties.readOnly = true; 
+				}
+				
+				
+				//
+				
+				if(row === 1)
+				{	
+		     var Project = function (instance, td, row, col, prop, value, cellProperties) {
+			  Handsontable.renderers.TextRenderer.apply(this, arguments);
+			   $(td).css({background: '#DDDDDD'});
+			  $(td).css({color: 'black'});
+			  $(td).css({fontWeight: 'bold'});
+			 };
+				this.renderer = Project;
+				cellProperties.readOnly = true; 
+				
+				}
+				
+					
+				
+				return cellProperties;
+			 
+			 }
+			  
+			});
+
+			
+			
+			
+			$('.maximize').on('click', function () {
+			  maxed = !maxed;
+			  $timesheet.handsontable('render');
+						  
+	      });
+		  
+		  }
+		  
+
+            $("#timesheet").handsontable('selectCell', 1, 1);
+			
+			
+			
+			
+			
+			
+			
+			
+		    
+			
+			
+			function GetRowsTotal(){
+			 
+			return data.reduce(function(sum, row){
+			return sum + row[1]; 
+			}, 0);
+			
+			}
+			
+			
+			function LoadGrid() {}
+			function LoadBaseGrid(){}
+			
+			
+	
+			InitGrid();
+			BlockDeletes();
+			InsertRows();
+			
+			
+			
+          </script>
+        </div>
+      </div>
+    </div>
+
+       
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+</body>
+</html>
